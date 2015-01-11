@@ -112,6 +112,10 @@ FEATURES['MILESTONES_APP'] = True
 ########################### Entrance Exams #################################
 FEATURES['ENTRANCE_EXAMS'] = True
 
+################################# DJANGO-REQUIRE ###############################
+
+# Whether to run django-require in debug mode.
+REQUIRE_DEBUG = DEBUG
 
 #####################################################################
 # See if the developer has any local overrides.
