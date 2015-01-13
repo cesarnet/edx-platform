@@ -683,7 +683,7 @@ class GroupConfigurationsTest(ContainerBase, SplitTestMixin):
         # Set required field
         config.name = "Name of the Group Configuration"
         config.groups[1].name = ''
-        try_to_save_and_verify_error_message("All groups must have a name.")
+        try_to_save_and_verify_error_message("All groups must have a unique name.")
         config.groups[0].remove()
         config.groups[0].remove()
         try_to_save_and_verify_error_message("There must be at least one group.")

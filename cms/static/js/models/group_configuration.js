@@ -35,7 +35,8 @@ function(Backbone, _, str, gettext, GroupModel, GroupCollection) {
             collectionType: GroupCollection
         }],
 
-        initialize: function() {
+        initialize: function(attributes, options) {
+            this.canBeEmpty = options && options.canBeEmpty;
             this.setOriginalAttributes();
             return this;
         },
@@ -45,7 +46,7 @@ function(Backbone, _, str, gettext, GroupModel, GroupCollection) {
         },
 
         reset: function() {
-            this.set(this._originalAttributes, { parse: true });
+            this.set(this._originalAttributes, { parse: true, validate: true });
         },
 
         isDirty: function() {
@@ -87,22 +88,29 @@ function(Backbone, _, str, gettext, GroupModel, GroupCollection) {
                 };
             }
 
-            if (attrs.groups.length < 1) {
+            if (!this.canBeEmpty && attrs.groups.length < 1) {
                 return {
                     message: gettext('There must be at least one group.'),
                     attributes: { groups: true }
                 };
             } else {
                 // validate all groups
-                var invalidGroups = [];
+                var validGroups = [],
+                    invalidGroups = [];
                 attrs.groups.each(function(group) {
-                    if(!group.isValid()) {
+                    if (!group.isValid()) {
                         invalidGroups.push(group);
+                    } else {
+                        if (_.find(validGroups, function(validGroup) { return validGroup.get('name') === group.get('name'); })) {
+                            invalidGroups.push(group);
+                        } else {
+                            validGroups.push(group);
+                        }
                     }
                 });
                 if (!_.isEmpty(invalidGroups)) {
                     return {
-                        message: gettext('All groups must have a name.'),
+                        message: gettext('All groups must have a unique name.'),
                         attributes: { groups: invalidGroups }
                     };
                 }
