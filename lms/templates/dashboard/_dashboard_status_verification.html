@@ -38,7 +38,7 @@
 
 %endif
 
-%if verification_status == 'must_reverify':
+%if verification_status == 'must_reverify' or verification_status == 'expired':
 <li class="status status-verification is-denied">
   <span class="title status-title">${_("ID-Verification Status")}</span>
 
