@@ -185,8 +185,7 @@ class TestEmptyCourseVideoSummaryList(MobileAPITestCase):
 
         path = course_outline[0]['path']
         self.assertEqual(1, len(path))
-        self.assertEqual(u'test factory chapter omega \u03a9',
-                         path[0]["name"])
+        self.assertEqual(u'test factory chapter omega \u03a9', path[0]["name"])
         #Named path will be deprecated eventually
         named_path = course_outline[0]['named_path']
         self.assertEqual(1, len(named_path))
@@ -220,8 +219,7 @@ class TestEmptyCourseVideoSummaryList(MobileAPITestCase):
 
         path = course_outline[0]['path']
         self.assertEqual(1, len(path))
-        self.assertEqual(u'test factory section omega \u03a9',
-                         path[0]["name"])
+        self.assertEqual(u'test factory section omega \u03a9', path[0]["name"])
         #Named path will be deprecated eventually
         named_path = course_outline[0]['named_path']
         self.assertEqual(1, len(named_path))
@@ -260,10 +258,8 @@ class TestEmptyCourseVideoSummaryList(MobileAPITestCase):
 
         path = course_outline[0]['path']
         self.assertEqual(2, len(path))
-        self.assertEqual(u'test factory chapter omega \u03a9',
-                         path[0]["name"])
-        self.assertEqual(u'test factory section omega \u03a9',
-                         path[1]["name"])
+        self.assertEqual(u'test factory chapter omega \u03a9', path[0]["name"])
+        self.assertEqual(u'test factory section omega \u03a9', path[1]["name"])
         #Named path will be deprecated eventually
         named_path = course_outline[0]['named_path']
         self.assertEqual(2, len(named_path))
@@ -310,12 +306,9 @@ class TestEmptyCourseVideoSummaryList(MobileAPITestCase):
 
         path = course_outline[0]['path']
         self.assertEqual(3, len(path))
-        self.assertEqual(u'test factory chapter omega \u03a9',
-                         path[0]["name"])
-        self.assertEqual(u'test factory section omega \u03a9',
-                         path[1]["name"])
-        self.assertEqual(u'test factory vertical omega \u03a9',
-                         path[2]["name"])
+        self.assertEqual(u'test factory chapter omega \u03a9', path[0]["name"])
+        self.assertEqual(u'test factory section omega \u03a9', path[1]["name"])
+        self.assertEqual(u'test factory vertical omega \u03a9', path[2]["name"])
         #Named path will be deprecated eventually
         named_path = course_outline[0]['named_path']
         self.assertEqual(3, len(named_path))
