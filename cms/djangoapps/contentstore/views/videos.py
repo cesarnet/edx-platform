@@ -127,7 +127,6 @@ def video_encodings_download(request, course_key_string):
         return _("{profile_name} URL").format(profile_name=profile)
 
     profile_whitelist = VideoUploadConfig.get_profile_whitelist()
-    status_whitelist = VideoUploadConfig.get_status_whitelist()
 
     videos = list(_get_videos(course))
     name_col = _("Name")
@@ -183,8 +182,7 @@ def video_encodings_download(request, course_key_string):
     )
     writer.writeheader()
     for video in videos:
-        if video["status"] in status_whitelist:
-            writer.writerow(make_csv_dict(video))
+        writer.writerow(make_csv_dict(video))
     return response
 
 
@@ -220,7 +218,13 @@ def _get_videos(course):
         for v in modulestore().get_all_asset_metadata(course.id, VIDEO_ASSET_TYPE)
     ]
 
-    return list(get_videos_for_ids(edx_videos_ids))
+    videos = list(get_videos_for_ids(edx_videos_ids))
+
+    # convert VAL's status to studio's Video Upload feature status.
+    for video in videos:
+        video["status"] = StatusDisplayStrings.get(video["status"])
+
+    return videos
 
 
 def _get_index_videos(course):
@@ -228,12 +232,10 @@ def _get_index_videos(course):
     Returns the information about each video upload required for the video list
     """
     return list(
-        dict(
-            [
-                (attr, video[attr])
-                for attr in ["edx_video_id", "client_video_id", "created", "duration", "status"]
-            ] + [("status", StatusDisplayStrings.get(video["status"]))]
-        )
+        {
+            attr: video[attr]
+            for attr in ["edx_video_id", "client_video_id", "created", "duration", "status"]
+        }
         for video in _get_videos(course)
     )
 
