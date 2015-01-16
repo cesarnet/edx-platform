@@ -134,6 +134,25 @@ class TestNonStandardCourseStructure(MobileAPITestCase):
     """
     REVERSE_INFO = {'name': 'video-summary-list', 'params': ['course_id']}
 
+    def _verify_paths(self, course_outline, path_list):
+        """
+        Takes a path_list and compares it against the course_outline
+
+        Attributes:
+            path_list (list): A list of the expected strings
+            course_outline (list): A list of dictionaries that includes a 'path'
+                and 'named_path' field which we will be comparing path_list to
+        """
+        path = course_outline[0]['path']
+        self.assertEqual(len(path), len(path_list))
+        for i in range(0, len(path_list)):
+            self.assertEqual(path_list[i], path[i]['name'])
+        #named_path will be deprecated eventually
+        named_path = course_outline[0]['named_path']
+        self.assertEqual(len(named_path), len(path_list))
+        for i in range(0, len(path_list)):
+            self.assertEqual(path_list[i], named_path[i])
+
     def setUp(self):
         super(TestNonStandardCourseStructure, self).setUp()
         self.chapter_under_course = ItemFactory.create(
@@ -199,20 +218,18 @@ class TestNonStandardCourseStructure(MobileAPITestCase):
         self.assertEqual(len(course_outline), 1)
         section_url = course_outline[0]["section_url"]
         unit_url = course_outline[0]["unit_url"]
-        print course_outline
         self.assertRegexpMatches(
             section_url,
             r'courseware/test_factory_vertical_under_course_omega_%CE%A9/$'
         )
         self.assertEqual(section_url, unit_url)
 
-        path = course_outline[0]['path']
-        self.assertEqual(1, len(path))
-        self.assertEqual(u'test factory vertical under course omega \u03a9', path[0]["name"])
-        #Named path will be deprecated eventually
-        named_path = course_outline[0]['named_path']
-        self.assertEqual(1, len(named_path))
-        self.assertEqual(u'test factory vertical under course omega \u03a9', named_path[0])
+        self._verify_paths(
+            course_outline,
+            [
+                u'test factory vertical under course omega \u03a9'
+            ]
+        )
 
     def test_video_under_chapter(self):
         """
@@ -236,13 +253,12 @@ class TestNonStandardCourseStructure(MobileAPITestCase):
 
         self.assertEqual(section_url, unit_url)
 
-        path = course_outline[0]['path']
-        self.assertEqual(1, len(path))
-        self.assertEqual(u'test factory chapter under course omega \u03a9', path[0]["name"])
-        #Named path will be deprecated eventually
-        named_path = course_outline[0]['named_path']
-        self.assertEqual(1, len(named_path))
-        self.assertEqual(u'test factory chapter under course omega \u03a9', named_path[0])
+        self._verify_paths(
+            course_outline,
+            [
+                u'test factory chapter under course omega \u03a9',
+            ]
+        )
 
     def test_section_under_course(self):
         """
@@ -265,13 +281,12 @@ class TestNonStandardCourseStructure(MobileAPITestCase):
 
         self.assertEqual(section_url, unit_url)
 
-        path = course_outline[0]['path']
-        self.assertEqual(1, len(path))
-        self.assertEqual(u'test factory section under course omega \u03a9', path[0]["name"])
-        #Named path will be deprecated eventually
-        named_path = course_outline[0]['named_path']
-        self.assertEqual(1, len(named_path))
-        self.assertEqual(u'test factory section under course omega \u03a9', named_path[0])
+        self._verify_paths(
+            course_outline,
+            [
+                u'test factory section under course omega \u03a9',
+            ]
+        )
 
     def test_no_vertical_for_video(self):
         """
@@ -295,15 +310,13 @@ class TestNonStandardCourseStructure(MobileAPITestCase):
 
         self.assertEqual(section_url, unit_url)
 
-        path = course_outline[0]['path']
-        self.assertEqual(2, len(path))
-        self.assertEqual(u'test factory chapter under course omega \u03a9', path[0]["name"])
-        self.assertEqual(u'test factory section under chapter omega \u03a9', path[1]["name"])
-        #Named path will be deprecated eventually
-        named_path = course_outline[0]['named_path']
-        self.assertEqual(2, len(named_path))
-        self.assertEqual(u'test factory chapter under course omega \u03a9', named_path[0])
-        self.assertEqual(u'test factory section under chapter omega \u03a9', named_path[1])
+        self._verify_paths(
+            course_outline,
+            [
+                u'test factory chapter under course omega \u03a9',
+                u'test factory section under chapter omega \u03a9',
+            ]
+        )
 
     def test_normal_structure(self):
         """
@@ -328,17 +341,14 @@ class TestNonStandardCourseStructure(MobileAPITestCase):
             r'courseware/test_factory_chapter_under_course_omega_%CE%A9/test_factory_section_under_chapter_omega_%CE%A9/1$'
         )
 
-        path = course_outline[0]['path']
-        self.assertEqual(3, len(path))
-        self.assertEqual(u'test factory chapter under course omega \u03a9', path[0]["name"])
-        self.assertEqual(u'test factory section under chapter omega \u03a9', path[1]["name"])
-        self.assertEqual(u'test factory vertical under section omega \u03a9', path[2]["name"])
-        #Named path will be deprecated eventually
-        named_path = course_outline[0]['named_path']
-        self.assertEqual(3, len(named_path))
-        self.assertEqual(u'test factory chapter under course omega \u03a9', named_path[0])
-        self.assertEqual(u'test factory section under chapter omega \u03a9', named_path[1])
-        self.assertEqual(u'test factory vertical under section omega \u03a9', named_path[2])
+        self._verify_paths(
+            course_outline,
+            [
+                u'test factory chapter under course omega \u03a9',
+                u'test factory section under chapter omega \u03a9',
+                u'test factory vertical under section omega \u03a9'
+            ]
+        )
 
 
 class TestVideoSummaryList(TestVideoAPITestCase, MobileAuthTestMixin, MobileEnrolledCourseAccessTestMixin):
