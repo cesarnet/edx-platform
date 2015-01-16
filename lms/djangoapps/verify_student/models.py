@@ -299,7 +299,7 @@ class PhotoVerification(StatusModel):
                     return ('none', error_msg)
 
             if attempt.created_at < cls._earliest_allowed_date():
-                return ('expired', _('Your photo verification has expired.'))
+                return ('expired', _("Your photo verification has expired."))
 
             # If someone is denied their original verification attempt, they can try to reverify.
             # However, if a midcourse reverification is denied, that denial is permanent.
