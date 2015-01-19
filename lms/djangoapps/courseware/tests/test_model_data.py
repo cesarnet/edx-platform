@@ -18,7 +18,7 @@ from courseware.tests.factories import StudentPrefsFactory, StudentInfoFactory
 from xblock.fields import Scope, BlockScope, ScopeIds
 from xblock.exceptions import KeyValueMultiSaveError
 from xblock.core import XBlock
-from django.test import TransactionTestCase
+from django.test import TestCase
 from django.db import DatabaseError
 
 
@@ -52,7 +52,7 @@ class StudentModuleFactory(cmfStudentModuleFactory):
     course_id = course_id
 
 
-class TestInvalidScopes(TransactionTestCase):
+class TestInvalidScopes(TestCase):
     """
     Invalid scope testing for KeyValueStore
     """
@@ -98,7 +98,7 @@ class OtherUserFailureTestMixin(object):
             self.kvs.set(self.other_key_factory(self.existing_field_name), "new_value")
 
 
-class TestStudentModuleStorage(OtherUserFailureTestMixin, TransactionTestCase):
+class TestStudentModuleStorage(OtherUserFailureTestMixin, TestCase):
     """Tests for user_state storage via StudentModule"""
     other_key_factory = partial(DjangoKeyValueStore.Key, Scope.user_state, 2, location('usage_id'))  # user_id=2, not 1
     existing_field_name = "a_field"
@@ -180,7 +180,7 @@ class TestStudentModuleStorage(OtherUserFailureTestMixin, TransactionTestCase):
         self.assertEquals(len(exception_context.exception.saved_field_names), 0)
 
 
-class TestMissingStudentModule(TransactionTestCase):
+class TestMissingStudentModule(TestCase):
     """
     Test StudentModule for a particular course.
     """
@@ -319,7 +319,7 @@ class StorageTestBase(object):
         self.assertEquals(exception.saved_field_names[0], 'existing_field')
 
 
-class TestUserStateSummaryStorage(StorageTestBase, TransactionTestCase):
+class TestUserStateSummaryStorage(StorageTestBase, TestCase):
     """Tests for UserStateSummaryStorage"""
     factory = UserStateSummaryFactory
     scope = Scope.user_state_summary
@@ -327,7 +327,7 @@ class TestUserStateSummaryStorage(StorageTestBase, TransactionTestCase):
     storage_class = factory.FACTORY_FOR
 
 
-class TestStudentPrefsStorage(OtherUserFailureTestMixin, StorageTestBase, TransactionTestCase):
+class TestStudentPrefsStorage(OtherUserFailureTestMixin, StorageTestBase, TestCase):
     """Tests for StudentPrefStorage"""
     factory = StudentPrefsFactory
     scope = Scope.preferences
@@ -337,7 +337,7 @@ class TestStudentPrefsStorage(OtherUserFailureTestMixin, StorageTestBase, Transa
     existing_field_name = "existing_field"
 
 
-class TestStudentInfoStorage(OtherUserFailureTestMixin, StorageTestBase, TransactionTestCase):
+class TestStudentInfoStorage(OtherUserFailureTestMixin, StorageTestBase, TestCase):
     """Tests for StudentInfoStorage"""
     factory = StudentInfoFactory
     scope = Scope.user_info

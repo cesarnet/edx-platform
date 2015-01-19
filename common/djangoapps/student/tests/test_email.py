@@ -7,7 +7,7 @@ from student.tests.factories import UserFactory, RegistrationFactory, PendingEma
 from student.views import reactivation_email_for_user, change_email_request, confirm_email_change
 from student.models import UserProfile, PendingEmailChange
 from django.contrib.auth.models import User, AnonymousUser
-from django.test import TestCase, TransactionTestCase
+from django.test import TestCase
 from django.test.client import RequestFactory
 from mock import Mock, patch
 from django.http import Http404, HttpResponse
@@ -198,7 +198,7 @@ class EmailChangeRequestTests(TestCase):
 @patch('django.contrib.auth.models.User.email_user')
 @patch('student.views.render_to_response', Mock(side_effect=mock_render_to_response, autospec=True))
 @patch('student.views.render_to_string', Mock(side_effect=mock_render_to_string, autospec=True))
-class EmailChangeConfirmationTests(EmailTestMixin, TransactionTestCase):
+class EmailChangeConfirmationTests(EmailTestMixin, TestCase):
     """Test that confirmation of email change requests function even in the face of exceptions thrown while sending email"""
     def setUp(self):
         self.user = UserFactory.create()

@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import AnonymousUser
 from django.utils.importlib import import_module
-from django.test import TestCase, TransactionTestCase
+from django.test import TestCase
 
 import mock
 
@@ -102,7 +102,7 @@ class TestCreateAccount(TestCase):
 @mock.patch.dict("student.models.settings.FEATURES", {"ENABLE_DISCUSSION_SERVICE": True})
 @mock.patch("lms.lib.comment_client.User.base_url", TEST_CS_URL)
 @mock.patch("lms.lib.comment_client.utils.requests.request", return_value=mock.Mock(status_code=200, text='{}'))
-class TestCreateCommentsServiceUser(TransactionTestCase):
+class TestCreateCommentsServiceUser(TestCase):
 
     def setUp(self):
         self.username = "test_user"

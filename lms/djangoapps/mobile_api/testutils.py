@@ -13,7 +13,7 @@ Test utilities for mobile API tests:
 # pylint: disable=no-member
 import ddt
 from mock import patch
-from rest_framework.test import APITransactionTestCase
+from rest_framework.test import APITestCase
 from django.core.urlresolvers import reverse
 
 from opaque_keys.edx.keys import CourseKey
@@ -35,7 +35,7 @@ ROLE_CASES = (
 )
 
 
-class MobileAPITestCase(ModuleStoreTestCase, APITransactionTestCase):
+class MobileAPITestCase(ModuleStoreTestCase, APITestCase):
     """
     Base class for testing Mobile APIs.
     Subclasses are expected to define REVERSE_INFO to be used for django reverse URL, of the form:

@@ -11,7 +11,7 @@ from mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import TransactionTestCase
+from django.test import TestCase
 from request_cache.middleware import RequestCache
 
 from xmodule.contentstore.django import _CONTENTSTORE
@@ -180,14 +180,14 @@ TEST_DATA_MONGO_MODULESTORE = mixed_store_config(mkdtemp(), {}, include_xml=Fals
 # TODO: acutally mock out the modulestore for this in a subsequent PR.
 TEST_DATA_MOCK_MODULESTORE = mixed_store_config(mkdtemp(), {}, include_xml=False)
 
-
-class ModuleStoreTestCase(TransactionTestCase):
+from nose.tools import set_trace; set_trace()
+class ModuleStoreTestCase(TestCase):
     """
     Subclass for transaction test cases that uses a ModuleStore.
     Ensures that the ModuleStore is cleaned before/after each test.
     Use this test class to test the effects of commit and rollback
     in a ModuleStore.
-    A TransactionTestCase resets the database before the test runs
+    A TestCase resets the database before the test runs
     by truncating all tables and reloading initial data.
 
     Usage:
@@ -306,7 +306,7 @@ class ModuleStoreTestCase(TransactionTestCase):
         # which will cause them to be re-created
         # the next time they are accessed.
         clear_existing_modulestores()
-        TransactionTestCase.setUpClass()
+        TestCase.setUpClass()
 
     def _pre_setup(self):
         """
