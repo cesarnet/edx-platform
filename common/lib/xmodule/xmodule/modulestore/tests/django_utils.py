@@ -180,15 +180,13 @@ TEST_DATA_MONGO_MODULESTORE = mixed_store_config(mkdtemp(), {}, include_xml=Fals
 # TODO: acutally mock out the modulestore for this in a subsequent PR.
 TEST_DATA_MOCK_MODULESTORE = mixed_store_config(mkdtemp(), {}, include_xml=False)
 
-from nose.tools import set_trace; set_trace()
+
 class ModuleStoreTestCase(TestCase):
     """
-    Subclass for transaction test cases that uses a ModuleStore.
+    Subclass for any test case that uses a ModuleStore.
     Ensures that the ModuleStore is cleaned before/after each test.
-    Use this test class to test the effects of commit and rollback
+    Use this test class to test the effects of commits and rollbacks
     in a ModuleStore.
-    A TestCase resets the database before the test runs
-    by truncating all tables and reloading initial data.
 
     Usage:
 
